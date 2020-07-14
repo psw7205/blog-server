@@ -14,6 +14,10 @@ module Blog
 
       included do
         helpers do
+          def current_user
+            @user
+          end
+
           def jwt_token
             token = headers['Authorization']
             error!(error_message(401, 'Unauthorized'), :unauthorized) if token.blank?

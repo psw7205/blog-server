@@ -27,6 +27,10 @@ module Blog
         error!(error_message(401, e.to_s), 401)
       end
 
+      rescue_from Grape::Exceptions::ValidationErrors do |e|
+        error!(error_message(400, e.full_messages[0]), 400)
+      end
+
       # global exception handler, used for error notifications
       rescue_from :all do |e|
         Rails.logger.error(e)
@@ -34,6 +38,7 @@ module Blog
       end
 
       mount Blog::V1::Users
+      mount Blog::V1::Posts
     end
   end
 end
