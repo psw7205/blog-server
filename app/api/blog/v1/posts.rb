@@ -62,8 +62,7 @@ module Blog
 
         post do
           authenticate!
-          post = Post.create(params[:post].merge(user_id: current_user.id,
-                                                 email: current_user.email))
+          post = Post.create(params[:post].merge(user_id: current_user.id))
           PostSerializer.new(post)
         end
 
@@ -86,7 +85,7 @@ module Blog
             authenticate!
 
             post = Post.find(params[:id])
-            if current_user.post? post
+            if current_user.author? post
               post.update(params[:post])
               PostSerializer.new(post)
             else
@@ -107,7 +106,7 @@ module Blog
             authenticate!
 
             post = Post.find(params[:id])
-            if current_user.post? post
+            if current_user.author? post
               post.update(params[:post])
               PostSerializer.new(post)
             else
@@ -122,7 +121,7 @@ module Blog
             authenticate!
 
             post = Post.find(params[:id])
-            if current_user.post? post
+            if current_user.author? post
               post.destroy
               { message: 'destroy post' }
             else

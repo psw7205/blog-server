@@ -39,6 +39,7 @@ module Blog
 
       mount Blog::V1::Users
       mount Blog::V1::Posts
+      mount Blog::V1::Comments
     end
   end
 end

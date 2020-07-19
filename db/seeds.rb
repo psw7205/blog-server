@@ -1,11 +1,29 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+20.times do |i|
+  User.create(email: "test_#{i}@test.com", password: 111111)
+end
 
-# 100.times do
-#   User.create(email: Faker::Internet.email, password: '111111')
-# end
+User.find_each do |u|
+  SecureRandom.rand(5..10).times do
+    u.posts.create(title: Faker::Lorem.sentence(word_count: 3, supplemental: true, random_words_to_add: 4),
+                   body: Faker::Lorem.paragraph(sentence_count: 10, supplemental: true, random_sentences_to_add: 10))
+  end
+end
+
+User.find_each do |u|
+  SecureRandom.rand(5..10).times do
+    u.comments.create(body: Faker::Lorem.paragraph(sentence_count: 4, supplemental: true, random_sentences_to_add: 4),
+                      target: User.order(Arel.sql('RANDOM()')).first)
+  end
+
+  SecureRandom.rand(5..10).times do
+    u.comments.create(body: Faker::Lorem.paragraph(sentence_count: 4, supplemental: true, random_sentences_to_add: 4),
+                      target: Post.order(Arel.sql('RANDOM()')).first)
+  end
+end
+
+User.find_each do |u|
+  SecureRandom.rand(5..10).times do
+    u.comments.create(body: Faker::Lorem.paragraph(sentence_count: 4, supplemental: true, random_sentences_to_add: 4),
+                      target: Comment.order(Arel.sql('RANDOM()')).first)
+  end
+end
